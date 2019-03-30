@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zufe.mychat.dao.QzxxMapper">
+  <resultMap id="BaseResultMap" type="com.zufe.mychat.bean.Qzxx">
+    <id column="qzid" jdbcType="VARCHAR" property="qzid" />
+    <result column="qzxx_id" jdbcType="INTEGER" property="qzxxId" />
+    <result column="qzname" jdbcType="VARCHAR" property="qzname" />
+    <result column="qzcreater" jdbcType="VARCHAR" property="qzcreater" />
+    <result column="yx" jdbcType="BIT" property="yx" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  
+   <resultMap id="WithStatusResultMap" type="com.zufe.mychat.bean.Qzxx" >
+  	 
+  	 
+     <id column="qzid" jdbcType="VARCHAR" property="qzid" />
+   
+   <result column="qzname" jdbcType="VARCHAR" property="qzname" />
+    <result column="qzcreater" jdbcType="VARCHAR" property="qzcreater" />
+   	 <!-- 指定联合查询 -->
+   	 <association property="qzcount" javaType="com.zufe.mychat.bean.Qzcount">
+   	 	<id column="Id" jdbcType="INTEGER" property="id" />
+   	 	<result column="count" jdbcType="INTEGER" property="count" />
+   	 </association>
+   	 
+   	 
+  </resultMap>
+  
+   <resultMap id="WithCnResultMap" type="com.zufe.mychat.bean.Qzxx" >
+  	 
+  	 
+     <id column="qzid" jdbcType="VARCHAR" property="qzid" />
+   
+   <result column="qzname" jdbcType="VARCHAR" property="qzname" />
+    <result column="qzid" jdbcType="VARCHAR" property="qzid" />
+   	 <!-- 指定联合查询 -->
+   	 <association property="chat_notification" javaType="com.zufe.mychat.bean.Chat_notification">
+   	 	<id column="Id" jdbcType="INTEGER" property="id" />
+   	 	<result column="count" jdbcType="INTEGER" property="count" />
+   	 </association>
+   	 
+   	 
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    qzid, qzxx_id, qzname, qzcreater, yx, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.zufe.mychat.bean.QzxxExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from qzxx
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from qzxx
+    where qzid = #{qzid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from qzxx
+    where qzid = #{qzid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zufe.mychat.bean.QzxxExample">
+    delete from qzxx
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.zufe.mychat.bean.Qzxx">
+    insert into qzxx (qzid, qzxx_id, qzname, 
+      qzcreater, yx, create_time
+      )
+    values (#{qzid,jdbcType=VARCHAR}, #{qzxxId,jdbcType=INTEGER}, #{qzname,jdbcType=VARCHAR}, 
+      #{qzcreater,jdbcType=VARCHAR}, #{yx,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zufe.mychat.bean.Qzxx">
+    insert into qzxx
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="qzid != null">
+        qzid,
+      </if>
+      <if test="qzxxId != null">
+        qzxx_id,
+      </if>
+      <if test="qzname != null">
+        qzname,
+      </if>
+      <if test="qzcreater != null">
+        qzcreater,
+      </if>
+      <if test="yx != null">
+        yx,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="qzid != null">
+        #{qzid,jdbcType=VARCHAR},
+      </if>
+      <if test="qzxxId != null">
+        #{qzxxId,jdbcType=INTEGER},
+      </if>
+      <if test="qzname != null">
+        #{qzname,jdbcType=VARCHAR},
+      </if>
+      <if test="qzcreater != null">
+        #{qzcreater,jdbcType=VARCHAR},
+      </if>
+      <if test="yx != null">
+        #{yx,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zufe.mychat.bean.QzxxExample" resultType="java.lang.Long">
+    select count(*) from qzxx
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+ <select id="selectQzxxWithStatus"  parameterType="java.lang.String"  resultMap="WithStatusResultMap">
+
+     select qzxx.qzname,qzxx.qzid ,qzxx.qzcreater,qzcount.count from qzxx,qzcount where qzxx.qzid=qzcount.qzid and qzxx.qzid like #{0}
+     and qzxx.qzcreater!=#{1}
+     and qzxx.qzid not in (select qzid from qzusers where qzusers.username=#{1} and qzusers.yx=1)
+    
+     
+  </select>	
+  
+   <select id="selectQzxxWithCn"  parameterType="java.lang.String"  resultMap="WithCnResultMap">
+
+  select  c.count,qzxx.qzname,qzxx.qzid from qzxx,chat_notification c,qzusers
+ where qzusers.qzid=c.qz_id and c.qz_id=qzxx.qzid and qzusers.username=#{0}
+and c.receiver= #{0}  
+     
+     
+  </select>	
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update qzxx
+    <set>
+      <if test="record.qzid != null">
+        qzid = #{record.qzid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qzxxId != null">
+        qzxx_id = #{record.qzxxId,jdbcType=INTEGER},
+      </if>
+      <if test="record.qzname != null">
+        qzname = #{record.qzname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qzcreater != null">
+        qzcreater = #{record.qzcreater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yx != null">
+        yx = #{record.yx,jdbcType=BIT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update qzxx
+    set qzid = #{record.qzid,jdbcType=VARCHAR},
+      qzxx_id = #{record.qzxxId,jdbcType=INTEGER},
+      qzname = #{record.qzname,jdbcType=VARCHAR},
+      qzcreater = #{record.qzcreater,jdbcType=VARCHAR},
+      yx = #{record.yx,jdbcType=BIT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zufe.mychat.bean.Qzxx">
+    update qzxx
+    <set>
+      <if test="qzxxId != null">
+        qzxx_id = #{qzxxId,jdbcType=INTEGER},
+      </if>
+      <if test="qzname != null">
+        qzname = #{qzname,jdbcType=VARCHAR},
+      </if>
+      <if test="qzcreater != null">
+        qzcreater = #{qzcreater,jdbcType=VARCHAR},
+      </if>
+      <if test="yx != null">
+        yx = #{yx,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where qzid = #{qzid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zufe.mychat.bean.Qzxx">
+    update qzxx
+    set qzxx_id = #{qzxxId,jdbcType=INTEGER},
+      qzname = #{qzname,jdbcType=VARCHAR},
+      qzcreater = #{qzcreater,jdbcType=VARCHAR},
+      yx = #{yx,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where qzid = #{qzid,jdbcType=VARCHAR}
+  </update>
+</mapper>
